@@ -17,7 +17,7 @@ DTC = $(KERNEL_OUT)/scripts/dtc/dtc
 define append-msm8974-dtb
 mkdir -p $(KERNEL_OUT)/arch/arm/boot; \
 rm $(KERNEL_OUT)/arch/arm/boot/*.dtb; \
-$(DTC) -p 1024 -O dtb -o $(DTB_FILE) $(MSM8926_DTS_FILE); \
+$(DTC) -p 1024 -O dtb -o $(DTB_FILE) $(MSM8974_DTS_FILE); \
 cat $(KERNEL_ZIMG) $(DTB_FILE) > $(ZIMG_FILE);
 endef
 
