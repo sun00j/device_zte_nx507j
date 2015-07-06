@@ -14,7 +14,10 @@
 # limitations under the License.
 #
 
+# Languages Pack
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
+
+# Vendor
 $(call inherit-product-if-exists, vendor/ZTE/NX507J/NX507J-vendor.mk)
 
 # Overlay
@@ -67,6 +70,7 @@ PRODUCT_PACKAGES += \
     audio.primary.msm8974 \
     audio.r_submix.default \
     audio.usb.default \
+
 PRODUCT_PACKAGES += \
     libaudio-resampler \
     libqcompostprocbundle \
@@ -81,11 +85,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/audio_platform_info.xml:system/etc/audio_platform_info.xml \
     $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf \
     $(LOCAL_PATH)/audio/mixer_paths.xml:system/etc/mixer_paths.xml
-
-# Connectivity Engine support
-PRODUCT_PACKAGES += \
-    libcnefeatureconfig \
-    services-ext
 
 # Charger
 PRODUCT_PACKAGES += \
@@ -108,38 +107,25 @@ PRODUCT_PACKAGES += \
     gralloc.msm8974 \
     hwcomposer.msm8974 \
     memtrack.msm8974 \
-    liboverlay \
-    libgenlock
+    liboverlay 
 
-# Ebtables
+# Misc dependency packages
 PRODUCT_PACKAGES += \
     ebtables \
     ethertypes \
-    libebtc
+    curl \
+    libnl_2 \
+    libbson
+
 # Filesystem
 PRODUCT_PACKAGES += \
     e2fsck \
-    fibmap.f2fs \
-    fsck.f2fs \
-    mkfs.f2fs \
     make_ext4fs \
-    resize2fs \
     setup_fs
-
-# GPS
-PRODUCT_PACKAGES += \
-    libgps.utils \
-    gps.msm8974 \
-    libloc_core \
-    libloc_eng
 
 # LOWI
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/etc/lowi.conf:system/etc/lowi.conf
-
-# IRSC
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/etc/sec_config:system/etc/sec_config
 
 # Keystore
 PRODUCT_PACKAGES += \
@@ -148,7 +134,6 @@ PRODUCT_PACKAGES += \
 # Lights
 PRODUCT_PACKAGES += \
     lights.msm8974
-
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -159,44 +144,46 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/etc/media_codecs.xml:system/etc/media_codecs.xml \
     $(LOCAL_PATH)/etc/media_profiles.xml:system/etc/media_profiles.xml
 
-# frandom
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/etc/init.d/01frandom:system/etc/init.d/01frandom
-# palm2sleep
-PRODUCT_PACKAGES += \
-    com.cyanogenmod.keyhandler
 # OMX
 PRODUCT_PACKAGES += \
     libc2dcolorconvert \
-    libdashplayer \
     libdivxdrmdecrypt \
+    libdashplayer \
     libOmxAacEnc \
     libOmxAmrEnc \
     libOmxCore \
-    libOmxMux \
     libOmxEvrcEnc \
     libOmxQcelp13Enc \
     libOmxVdec \
     libOmxVdecHevc \
     libOmxVenc \
-    libHevcSwDecoder \
     libstagefrighthw \
     qcmediaplayer
 
-PRODUCT_PACKAGES += \
-    NX507JSettings
 PRODUCT_BOOT_JARS += \
     qcmediaplayer
-
-PRODUCT_BOOT_JARS += \
-    qcom.fmradio
-
-PRODUCT_PACKAGES += \
-    com.android.vcard
 
 # Power
 PRODUCT_PACKAGES += \
     power.msm8974
+
+# QRNGD
+PRODUCT_PACKAGES += \
+    qrngd \
+    qrngp
+
+# GPS
+PRODUCT_PACKAGES += \
+	gps.msm8974 \
+	libloc_adapter \
+	libloc_eng \
+	libloc_api_v02 \
+	libloc_ds_api \
+	libloc_core \
+	libizat_core \
+	libgeofence \
+	libgps.utils \
+	flp.msm8974
 
 # Ramdisk
 PRODUCT_PACKAGES += \
@@ -225,9 +212,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     Torch
 
-# Thermal config
+# Thermald
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/thermal-engine.conf:system/etc/thermal-engine-8974.conf
+	$(LOCAL_PATH)/thermald/thermald-8974.conf:system/etc/thermald-8974.conf \
+	$(LOCAL_PATH)/thermald/thermal-engine-8974.conf:system/etc/thermal-engine-8974.conf \
+	$(LOCAL_PATH)/thermald/thermal-engine-8974pro.conf:system/etc/thermal-engine-8974pro.conf
 
 # USB
 PRODUCT_PACKAGES += \
@@ -257,6 +246,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     giflib
 
+# Wlan
 PRODUCT_PACKAGES += \
     WCNSS_cfg.dat \
     WCNSS_qcom_cfg.ini \
@@ -270,35 +260,16 @@ PRODUCT_PACKAGES += \
     libQWiFiSoftApCfg \
     wcnss_service
 
-PRODUCT_PACKAGES += \
-    libion
-
-PRODUCT_PACKAGES += \
-    ntfs-3g \
-    ntfsfix \
-    mkntfs
-
+# LatinIME
 PRODUCT_PACKAGES += \
     LatinIME \
     libjni_latinime
-
 
 # Set default USB interface
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp
 
-# Enable USB OTG interface
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.isUsbOtgEnabled=true
-
-# Enable Bluetooth HFP service
-PRODUCT_PROPERTY_OVERRIDES +=
-    bluetooth.hfp.client=1
-
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    camera2.portability.force_api=1
-
-
+# etc bluetooth
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/etc/bluetooth/main.conf:system/etc/bluetooth/main.conf \
     $(LOCAL_PATH)/etc/bluetooth/input.conf:system/etc/bluetooth/input.conf \
@@ -307,7 +278,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/etc/bluetooth/blacklist.conf:system/etc/bluetooth/blacklist.conf \
     $(LOCAL_PATH)/etc/bluetooth/network.conf:system/etc/bluetooth/network.conf \
     $(LOCAL_PATH)/etc/cne/andsfCne.xml:system/etc/cne/andsfCne.xml \
-    $(LOCAL_PATH)/etc/cne/NsrmConfiguration.xml:system/etc/cne/NsrmConfiguration.xml \
     $(LOCAL_PATH)/etc/cne/SwimConfig.xml:system/etc/cne/SwimConfig.xml \
     $(LOCAL_PATH)/etc/flp.conf:system/etc/flp.conf \
     $(LOCAL_PATH)/etc/gps.conf:system/etc/gps.conf \
@@ -333,8 +303,21 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/etc/xtwifi.conf:system/etc/xtwifi.conf \
     $(LOCAL_PATH)/etc/hostapd/hostapd_default.conf:system/etc/hostapd/hostapd_default.conf
 
+# keylayout
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/usr/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
-    $(LOCAL_PATH)/usr/keylayout/Generic.kl:system/usr/keylayout/Generic.kl
+	$(LOCAL_PATH)/usr/keylayout/atmel_mxt_ts.kl:system/usr/keylayout/atmel_mxt_ts.kl \
+	$(LOCAL_PATH)/usr/keylayout/AVRCP.kl:system/usr/keylayout/AVRCP.kl \
+	$(LOCAL_PATH)/usr/keylayout/Generic.kl:system/usr/keylayout/Generic.kl \
+	$(LOCAL_PATH)/usr/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
+	$(LOCAL_PATH)/usr/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl
+
+# keychars
+PRODUCT_COPY_FILES += \
+     $(LOCAL_PATH)/usr/keychars/Generic.kcm:system/usr/keychars/Generic.kcm
+
+# idc
+PRODUCT_COPY_FILES += \
+     $(LOCAL_PATH)/usr/idc/cyttsp4_mt.idc:system/usr/idc/cyttsp4_mt.idc 
+
 
 

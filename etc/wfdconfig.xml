@@ -36,26 +36,26 @@
 	  <VideoCodec>
 		<Profile>1</Profile>
 		<Level>4</Level>
-		<HorizontalResolution>1280</HorizontalResolution>
-		<VerticalResolution>720</VerticalResolution>
+		<HorizontalResolution>1920</HorizontalResolution>
+		<VerticalResolution>1080</VerticalResolution>
 		<Latency>0</Latency>
 		<MinimumSliceSize>0</MinimumSliceSize>
 		<SliceEncodingParams>0</SliceEncodingParams>
 		<FrameRateControlSupp>1</FrameRateControlSupp>
-		<VideoFps>24</VideoFps>
+		<VideoFps>30</VideoFps>
 	  </VideoCodec>
 </CBP>
 <CHP>
 	  <VideoCodec>
 		<Profile>2</Profile>
 		<Level>4</Level>
-		<HorizontalResolution>1280</HorizontalResolution>
-		<VerticalResolution>720</VerticalResolution>
+		<HorizontalResolution>1920</HorizontalResolution>
+		<VerticalResolution>1080</VerticalResolution>
 		<Latency>0</Latency>
 		<MinimumSliceSize>0</MinimumSliceSize>
 		<SliceEncodingParams>0</SliceEncodingParams>
 		<FrameRateControlSupp>1</FrameRateControlSupp>
-		<VideoFps>24</VideoFps>
+		<VideoFps>30</VideoFps>
 	  </VideoCodec>
 </CHP>
 

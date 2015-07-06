@@ -16,13 +16,22 @@
 
 # call the proprietary setup
 $(call inherit-product, vendor/ZTE/NX507J/NX507J-vendor.mk)
+
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 # Wifi
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin  \
     kernel/ZTE/NX507J/drivers/staging/prima/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
-    kernel/ZTE/NX507J/drivers/staging/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini
+    kernel/ZTE/NX507J/drivers/staging/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini 
+
+# TimeService
+PRODUCT_PACKAGES += \
+	TimeService
+
+# Recovery allowed devices
+TARGET_OTA_ASSERT_DEVICE := nx507j, NX507J
 
 # Inherit from msm8974-common
 $(call inherit-product, device/ZTE/NX507J/msm8974.mk)

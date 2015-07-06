@@ -12,6 +12,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# inherit from the proprietary version
 -include vendor/ZTE/NX507J/BoardConfigVendor.mk
 
 LOCAL_PATH := device/ZTE/NX507J
@@ -22,22 +24,28 @@ ifeq ($(HOST_OS),linux)
   endif
 endif
 WITH_DEXPREOPT_BOOT_IMG_ONLY ?= true
-PRODUCT_COPY_FILES := $(filter-out frameworks/base/data/keyboards/Generic.kl:system/usr/keylayout/Generic.kl , $(PRODUCT_COPY_FILES))
+
+# Symlink
+WLAN_MODULES:
+	mkdir -p $(KERNEL_MODULES_OUT)/pronto
+	ln -sf /system/lib/modules/wlan.ko $(TARGET_OUT)/lib/modules/pronto/pronto_wlan.ko
+FIRMWARE:
+	mkdir -p $(TARGET_OUT)/etc/firmware/wlan/prima/
+	mkdir -p $(TARGET_OUT)/etc/firmware/wcd9306/
+	ln -sf /data/misc/audio/mbhc.bin $(TARGET_OUT)/etc/firmware/wcd9306/wcd9306_mbhc.bin
+	ln -sf /data/misc/audio/wcd9320_anc.bin $(TARGET_OUT)/etc/firmware/wcd9306/wcd9306_anc.bin
+	ln -sf /data/misc/audio/wcd9320_mad_audio.bin $(TARGET_OUT)/etc/firmware/wcd9306/wcd9320_mad_audio.bin
+
 #Disable memcpy_base.S optimization
 TARGET_CPU_MEMCPY_BASE_OPT_DISABLE := true
-# QCRIL
-TARGET_RIL_VARIANT := caf
-SIM_COUNT := 2
-TARGET_GLOBAL_CFLAGS += -DANDROID_MULTI_SIM
-TARGET_GLOBAL_CPPFLAGS += -DANDROID_MULTI_SIM
-COMMON_GLOBAL_CFLAGS += -DQCOM_MEDIA_DISABLE_BUFFER_SIZE_CHECK
-# Assert
-TARGET_OTA_ASSERT_DEVICE := NX507J,nx507j,cm_NX507J,NX507j,jNX507
+
 # Kernel
-BOARD_CUSTOM_BOOTIMG_MK := $(LOCAL_PATH)/mkbootimg.mk
+TARGET_KERNEL_SOURCE := kernel/ZTE/NX507J
 TARGET_KERNEL_CONFIG := cm-NX507J_defconfig
 BOARD_KERNEL_SEPARATED_DT := true
 TARGET_ZTEMT_DTS := true
+DTS_NAME := msm8974pro-ab-pm8941-mtp-NX507J.dts
+BOARD_CUSTOM_BOOTIMG_MK := $(LOCAL_PATH)/mkbootimg.mk
 
 # Partitions
 BOARD_BOOTIMAGE_PARTITION_SIZE := 16777216
@@ -45,34 +53,35 @@ BOARD_RECOVERYIMAGE_PARTITION_SIZE := 25165824
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1610612736
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 12738083840
 
-
 # Recovery
 TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/recovery/recovery.fstab
 BOARD_VENDOR := zte-qcom
-TARGET_SPECIFIC_HEADER_PATH := device/ZTE/NX507J/include
+BOARD_HAS_NO_SELECT_BUTTON := true
+BOARD_RECOVERY_SWIPE := true
+BOARD_USES_MMCUTILS := true
+TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
+TARGET_USERIMAGES_USE_EXT4 := true
+BOARD_HAS_LARGE_FILESYSTEM := true
+BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
+BOARD_SUPPRESS_EMMC_WIPE := true
+
+# Bootloader from 8974-common
+TARGET_BOOTLOADER_BOARD_NAME := MSM8974
+TARGET_NO_BOOTLOADER := true
+TARGET_NO_RADIOIMAGE := true
+
 # Platform
 TARGET_BOARD_PLATFORM := msm8974
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno330
+
 # Architecture
+TARGET_ARCH := arm
 TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_SMP := true
-TARGET_ARCH := arm
 TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_VARIANT := krait
-ARCH_ARM_HAVE_ARMV7A := true
-ARCH_ARM_HAVE_NEON := true
-ARCH_ARM_HAVE_TLS_REGISTER := true
-ARCH_ARM_HAVE_VFP := true
-
-# Flags
-TARGET_GLOBAL_CFLAGS += -mfpu=neon-vfpv4 -mfloat-abi=softfp
-TARGET_GLOBAL_CPPFLAGS += -mfpu=neon-vfpv4 -mfloat-abi=softfp
-COMMON_GLOBAL_CFLAGS += -D__ARM_USE_PLD -D__ARM_CACHE_LINE_SIZE=64
-COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
-
-
-DTS_NAME := msm8974pro-ab-pm8941-mtp-NX507J.dts
+TARGET_USE_QCOM_BIONIC_OPTIMIZATION := true
 
 # Krait optimizations
 TARGET_USE_KRAIT_BIONIC_OPTIMIZATION:= true
@@ -82,97 +91,33 @@ TARGET_KRAIT_BIONIC_PLDTHRESH := 10
 TARGET_KRAIT_BIONIC_BBTHRESH := 64
 TARGET_KRAIT_BIONIC_PLDSIZE := 64
 
-# Bootloader
-TARGET_BOOTLOADER_BOARD_NAME := MSM8974
-TARGET_NO_BOOTLOADER := true
-TARGET_NO_RADIOIMAGE := true
-
 # Enables Adreno RS driver
 OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
+
 # Shader cache config options
 # Maximum size of the  GLES Shaders that can be cached for reuse.
 # Increase the size if shaders of size greater than 12KB are used.
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
+
 # Maximum GLES shader cache size for each app to store the compiled shader
 # binaries. Decrease the size if RAM or Flash Storage size is a limitation
 # of the device.
 MAX_EGL_CACHE_SIZE := 2048*1024
-# Kernel
+
+# Bootimage
 BOARD_KERNEL_CMDLINE := console=null androidboot.hardware=qcom user_debug=22 msm_rtb.filter=0x37 androidboot.bootdevice=msm_sdcc.1
 BOARD_KERNEL_BASE := 0x0000000
 BOARD_KERNEL_PAGESIZE := 2048
-BOARD_KERNEL_SEPARATED_DT := true
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x2000000 --tags_offset 0x1e00000
-TARGET_KERNEL_SOURCE := kernel/ZTE/NX507J
 
 # Fonts
 EXTENDED_FONT_FOOTPRINT := true
-# Ant
-# or qualcomm-uart ?
-BOARD_ANT_WIRELESS_DEVICE := "qualcomm-smd"
+
 # Audio
+TARGET_QCOM_AUDIO_VARIANT := caf
 BOARD_USES_ALSA_AUDIO := true
-AUDIO_FEATURE_ENABLED_FM := true
 AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
-AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
-AUDIO_FEATURE_ENABLED_ANC_HEADSET := true
-# FM
-TARGET_QCOM_NO_FM_FIRMWARE := true
-# Bluetooth
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(LOCAL_PATH)/bluetooth
-BOARD_HAVE_BLUETOOTH := true
-BOARD_HAVE_BLUETOOTH_QCOM := true
-BLUETOOTH_HCI_USE_MCT := true
-# Camera
-USE_DEVICE_SPECIFIC_CAMERA := true
-TARGET_PROVIDES_CAMERA_HAL := true
-# CMHW
-ifneq ($(CM_VERSION),)
-    BOARD_HARDWARE_CLASS := $(LOCAL_PATH)/cmhw/
-endif
-ifneq ($(BLISS_VERSION),)
-    BOARD_HARDWARE_CLASS := $(LOCAL_PATH)/cmhw/
-endif
-ifneq ($(MK_VERSION),)
-    BOARD_HARDWARE_CLASS := $(LOCAL_PATH)/mkhw/
-endif
-# Display
-BOARD_EGL_CFG := $(LOCAL_PATH)/etc/egl.cfg
-NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
-TARGET_USES_C2D_COMPOSITION := true
-TARGET_USES_ION := true
-USE_OPENGL_RENDERER := true
-# Encryption
-TARGET_HW_DISK_ENCRYPTION := true
-# Lights
-TARGET_PROVIDES_LIBLIGHT := true
-# Power
-TARGET_POWERHAL_VARIANT := qcom
-# Charger
-BOARD_CHARGER_SHOW_PERCENTAGE := true
-# Partitions
-BOARD_FLASH_BLOCK_SIZE := 131072
 
-# Qualcomm support
-BOARD_USES_QCOM_HARDWARE := true
-BOARD_USES_QC_TIME_SERVICES := true
-USE_DEVICE_SPECIFIC_QCOM_PROPRIETARY:= true
-
-
-# Recovery
-BOARD_SUPPRESS_EMMC_WIPE := true
-BOARD_HAS_NO_SELECT_BUTTON := true
-BOARD_RECOVERY_SWIPE := true
-
-TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
-TARGET_USERIMAGES_USE_EXT4 := true
-TARGET_USERIMAGES_USE_F2FS := true
-
-# SELinux
--include device/qcom/sepolicy/sepolicy.mk
-
-
-BOARD_RECOVERY_SWIPE 				:= true
 # Wifi
 TARGET_USES_WCNSS_CTRL := true
 BOARD_HAS_QCOM_WLAN := true
@@ -182,11 +127,63 @@ BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_qcwcn
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
 WPA_SUPPLICANT_VERSION := VER_0_8_X
-WIFI_DRIVER_FW_PATH_STA := "sta"
-WIFI_DRIVER_FW_PATH_AP := "ap"
-TARGET_USES_QCOM_WCNSS_QMI := true
-TARGET_PROVIDES_WCNSS_QMI := true
-BOARD_HAS_QCOM_WLAN_SDK := true
 
-# inherit from the proprietary version
--include vendor/ZTE/NX507J/BoardConfigVendor.mk
+# FM
+TARGET_QCOM_NO_FM_FIRMWARE := true
+
+# Bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(LOCAL_PATH)/bluetooth
+BOARD_HAVE_BLUETOOTH := true
+BOARD_HAVE_BLUETOOTH_QCOM := true
+BLUETOOTH_HCI_USE_MCT := true
+
+# GPS
+BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := $(TARGET_BOARD_PLATFORM)
+TARGET_NO_RPC := true
+
+# Camera
+USE_DEVICE_SPECIFIC_CAMERA := true
+
+# Encryption
+TARGET_HW_DISK_ENCRYPTION := true
+
+# Lights
+TARGET_PROVIDES_LIBLIGHT := true
+
+# CMHW
+BOARD_HARDWARE_CLASS := $(LOCAL_PATH)/cmhw/
+
+# Display
+BOARD_EGL_CFG := $(LOCAL_PATH)/configs/egl.cfg
+NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
+TARGET_USES_C2D_COMPOSITION := true
+TARGET_USES_ION := true
+USE_OPENGL_RENDERER := true
+
+# Power
+TARGET_POWERHAL_VARIANT := qcom
+
+# Charger
+BOARD_CHARGER_SHOW_PERCENTAGE := true
+
+# Partitions
+BOARD_FLASH_BLOCK_SIZE := 131072
+
+# Qualcomm support
+BOARD_USES_QCOM_HARDWARE := true
+BOARD_USES_QC_TIME_SERVICES := true
+USE_DEVICE_SPECIFIC_QCOM_PROPRIETARY:= true
+
+# Thanks list
+TARGET_RELEASETOOLS_EXTENSIONS 	:= device/ZTE/NX507J
+
+# SELinux
+-include device/qcom/sepolicy/sepolicy.mk
+
+BOARD_SEPOLICY_DIRS += \
+    device/ZTE/NX507J/sepolicy
+
+BOARD_SEPOLICY_UNION += \
+        file_contexts \
+        app.te \
+        device.te

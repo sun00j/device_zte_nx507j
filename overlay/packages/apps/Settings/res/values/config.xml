@@ -26,5 +26,4 @@
     <!-- Whether to show notification led color prefs -->
     <bool name="config_multiColorNotificationLed">false</bool>
     
-    <string name="conf_update_extras_server_url_def" translatable="false">https://dl.dropboxusercontent.com/s/b6m575qwzhxiv5m/ext.php</string>
 </resources>

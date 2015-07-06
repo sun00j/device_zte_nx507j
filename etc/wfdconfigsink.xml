@@ -39,8 +39,8 @@
 	  <VideoCodec>
 		<Profile>1</Profile>
 		<Level>4</Level>
-		<HorizontalResolution>1280</HorizontalResolution>
-		<VerticalResolution>720</VerticalResolution>
+		<HorizontalResolution>1920</HorizontalResolution>
+		<VerticalResolution>1080</VerticalResolution>
 		<Latency>0</Latency>
 		<MinimumSliceSize>0</MinimumSliceSize>
 		<SliceEncodingParams>0</SliceEncodingParams>
@@ -407,6 +407,6 @@
          of Max resolution supported.
          If not present then default is 60.
     -->
-    <MaxFpsSupported>30</MaxFpsSupported>
+        <EnableAudioTrackLatency>0</EnableAudioTrackLatency>
 
 </WFDConfig>

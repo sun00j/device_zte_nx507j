@@ -43,7 +43,7 @@
 		<MinimumSliceSize>0</MinimumSliceSize>
 		<SliceEncodingParams>0</SliceEncodingParams>
 		<FrameRateControlSupp>1</FrameRateControlSupp>
-		<VideoFps>30</VideoFps>
+		<VideoFps>24</VideoFps>
 	  </VideoCodec>
 </CBP>
 	  <StandbyResumeCapability>
@@ -163,7 +163,7 @@
 				<MaxBitrate>4000000</MaxBitrate>
 			</BIT4>
 			<BIT5>
-				<MinBitrate>5000000</MinBitrate>
+				<MinBitrate>2500000</MinBitrate>
 				<MaxBitrate>5000000</MaxBitrate>
 			</BIT5>
 			<BIT6>
@@ -172,11 +172,11 @@
 			</BIT6>
 			<BIT7>
 				<MinBitrate>5000000</MinBitrate>
-				<MaxBitrate>20000000</MaxBitrate>
+				<MaxBitrate>10000000</MaxBitrate>
 			</BIT7>
 			<BIT8>
 				<MinBitrate>10000000</MinBitrate>
-				<MaxBitrate>40000000</MaxBitrate>
+				<MaxBitrate>20000000</MaxBitrate>
 			</BIT8>
 			<BIT9>
 				<MinBitrate>10000000</MinBitrate>
@@ -203,7 +203,7 @@
 				<MaxBitrate>40000000</MaxBitrate>
 			</BIT14>
 			<BIT15>
-				<MinBitrate>5000000</MinBitrate>
+				<MinBitrate>2500000</MinBitrate>
 				<MaxBitrate>5000000</MaxBitrate>
 			</BIT15>
 			<BIT16>
