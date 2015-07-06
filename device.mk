@@ -30,8 +30,5 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
 	TimeService
 
-# Recovery allowed devices
-TARGET_OTA_ASSERT_DEVICE := nx507j, NX507J
-
 # Inherit from msm8974-common
 $(call inherit-product, device/ZTE/NX507J/msm8974.mk)
